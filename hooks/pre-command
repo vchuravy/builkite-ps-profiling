@@ -19,4 +19,4 @@ echo ${URL}
 curl -sL ${URL} | tar xvfz -
 
 echo "--- Run agent in background"
-./parca-agent --metadata-external-labels="${LABELS}" --profiling-duration=${PROFILING_DURATION} --profiling-cpu-sampling-frequency=${PROFILING_FREQUENCY} --node=buildkite --remote-store-address=${REMOTE_STORE_ADDRESS} --remote-store-bearer-token=${POLARSIGNALS_CLOUD_TOKEN} & #> /dev/null 2>&1 &
+./parca-agent --metadata-external-labels="${LABELS}" --profiling-duration=${PROFILING_DURATION} --profiling-cpu-sampling-frequency=${PROFILING_FREQUENCY} --node=buildkite --remote-store-address=${STORE_ADDRESS} --remote-store-bearer-token=${POLARSIGNALS_CLOUD_TOKEN} & #> /dev/null 2>&1 &
