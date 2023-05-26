@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+shopt -s globstar extglob nullglob
+
+## Set some global configuration options, but allow users to override them
+
+POLARSIGNALS_CLOUD_TOKEN="${BUILDKITE_PLUGIN_POLARSIGNALS_CLOUD_TOKEN}"
+STORE_ADDRESS="${BUILDKITE_PLUGIN_POLARSIGNALS_STORE_ADDRESS:-grpc.polarsignals.com:443}"
+PARCA_AGENT_VERSION="${BUILDKITE_PLUGIN_POLARSIGNALS_PARCA_AGENT_VERSION:-0.19.0}"
+PROFILING_FREQUENCY="${BUILDKITE_PLUGIN_POLARSIGNALS_PROFILING_FREQUENCY:-99}"
+PROFILING_DURATION="${BUILDKITE_PLUGIN_POLARSIGNALS_PROFILING_DURATION:-3s}"
+LABELS="${BUILDKITE_PLUGIN_POLARSIGNALS_LABELS:-}"
+
+echo "--- Install Parca Agent"
+OS=`uname -s` 
+ARCH=`uname -m` 
+URL="https://github.com/parca-dev/parca-agent/releases/download/v${PARCA_AGENT_VERSION}/parca-agent_${PARCA_AGENT_VERSION}_${OS}_${ARCH}.tar.gz"
+echo ${URL}
+curl -sL ${URL} | tar xvfz -
+
+echo "--- Run agent in background"
+./parca-agent --metadata-external-labels="${LABELS}" --profiling-duration=${PROFILING_DURATION} --profiling-cpu-sampling-frequency=${PROFILING_FREQUENCY} --node=buildkite --remote-store-address=${REMOTE_STORE_ADDRESS} --remote-store-bearer-token=${POLARSIGNALS_CLOUD_TOKEN} & #> /dev/null 2>&1 &

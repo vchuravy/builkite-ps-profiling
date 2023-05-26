@@ -1,0 +1,19 @@
+name: Polarsignals
+description: Set-up Parca/Polarsignals for use in your pipeline.
+author: https://github.com/vchuravy
+requirements: [python3, curl]
+configuration:
+  properties:
+    cloud_token:
+      type: string
+    store_address:
+      type: string
+    parca_agent_version:
+      type: string
+    profiling_frequency:
+      type: int
+    profiling_duration:
+      type: string
+    labels:
+      type: string
+  additionalProperties: false
